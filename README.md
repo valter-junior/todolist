@@ -7,6 +7,5 @@
 | `POST /api/user/task` | Create a List | body `{ title: string, description: string}` | `{ title: string, description: string}` |
 | `GET /api/user/task` | List all task | body `{title: string, description: string}` | `{title: string, description: string}` |
 | `GET /api/user/task/{id}` | List specific task | body `{title: string, description: string}` | `{title: string, description: string}` |
-| `PUT /api/user/task/{id}/edit` | Edit specific task | body `{title: string, description: string}` | `{title: string, description: string}` |
-| `PUT /api/user/task/{id}/done` | Realized specific task | body `{title: string, description: string}` | `{title: string, description: string}` |
-| `DELETE /api/user/task/{id}/delete` | Delete specific task | body `{title: string, description: string}` | `{title: null, description: null}` |
+| `PUT /api/user/task/{id}` | Edit specific task | body `{title: string, description: string}` | `{title: string, description: string}` |
+| `DELETE /api/user/task/{id}` | Delete specific task | body `{title: string, description: string}` | `{title: null, description: null}` |
