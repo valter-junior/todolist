@@ -10,5 +10,3 @@
 | `PUT /api/user/task/{id}/edit` | Edit specific task | body `{title: string, description: string}` | `{title: string, description: string}` |
 | `PUT /api/user/task/{id}/done` | Realized specific task | body `{title: string, description: string}` | `{title: string, description: string}` |
 | `DELETE /api/user/task/{id}/delete` | Delete specific task | body `{title: string, description: string}` | `{title: null, description: null}` |
-
-
