@@ -14,10 +14,8 @@ function Login () {
             <label>
                 Password:
                 <input type="password" {...register("password")} />
-            </label>
-            
+            </label> 
             <input type="submit" value="submit" />
-
         </form>
     );
 }

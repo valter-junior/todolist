@@ -24,9 +24,7 @@ function SignIn () {
                 Password:
                 <input type="password" {...register("password")} />
             </label>
-                
             <input type="submit" value="submit" />
-
         </form>
     );
 }

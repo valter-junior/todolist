@@ -14,13 +14,10 @@ function App () {
   return (
     <div>
       <Container>
-       
-      
           <Switch>
             <ProtectedRoute exact path="/login" component={Home}>
               <Login />
             </ProtectedRoute>
-              
             <Route path="/sign-in" component={SignIn}>
               <SignIn />
             </Route>
@@ -28,13 +25,9 @@ function App () {
               <Home />
             </Route>
           </Switch>
-      
-
-      </Container>
-      
+      </Container>  
     </div>
   )
 }
-
 
 export default App;
