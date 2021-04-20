@@ -1,6 +1,5 @@
-import { useForm } from "react-hook-form";
-
-let count =0;
+import React from 'react';
+import {useForm} from 'react-hook-form';
 
 function Login () {
     const {register, handleSubmit} = useForm();
@@ -14,7 +13,7 @@ function Login () {
             </label>
             <label>
                 Password:
-                <input {...register("password")} />
+                <input type="password" {...register("password")} />
             </label>
             
             <input type="submit" value="submit" />

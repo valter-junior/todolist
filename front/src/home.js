@@ -1,13 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import auth from './auth';
+import {useHistory} from 'react-router-dom';
 
 
-function Home() {
+export const Home = (props) => {
+    const history = useHistory();
     return (
         <div>
         <h1>Task</h1>
-        <Button component={Link} to="/login">Login</Button>
+        <Button 
+            onClick={() => {
+                auth.login(() => {
+                    history.push("/login")
+                    
+                });
+            }}>Login</Button>
         <Button component={Link} to="/sign-in">Sign In</Button>
     </div>
         
@@ -16,4 +25,3 @@ function Home() {
 }
 
 
-export default Home;
