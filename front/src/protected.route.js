@@ -13,10 +13,10 @@ export const ProtectedRoute = ({component: Component, ...rest}) => {
                           pathname: "/",
                           state: {
                               from: props.location
-                        }}
-                     }/>
+                       }}
+                }/>
 
-                }
+              }
                 
             }
         }/>

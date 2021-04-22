@@ -16,16 +16,16 @@ function App () {
       <Container>
         <BrowserRouter>
           <Switch>
-              <ProtectedRoute exact path="/login" component={Home}>
-                <Login />
-              </ProtectedRoute>
-              <Route path="/sign-in" component={SignIn}>
-                <SignIn />
-              </Route>
-              <Route path="/">
-                <Home />
-              </Route>
-            </Switch>
+            <ProtectedRoute exact path="/login" component={Home}>
+              <Login />
+            </ProtectedRoute>
+            <Route path="/sign-in" component={SignIn}>
+              <SignIn />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
         </BrowserRouter>
       </Container>  
     </div>
