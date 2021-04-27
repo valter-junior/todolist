@@ -1,7 +1,11 @@
-var Sequelize = require("sequelize")
+const Pool = require("pg").Pool;
 
-var sequelize = new Sequelize('todolist', 'postgres', 'postgres', {
-  dialect: 'postgres'
+const pool = new Pool({
+  user: "postgres",
+  password: "postgres",
+  host: "localhost",
+  port: 5432,
+  database: "todolist"
 });
 
-module.exports = sequelize;
+module.exports = pool;
