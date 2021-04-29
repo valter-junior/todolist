@@ -25,7 +25,7 @@ passport.use(new LocalStrategy((username, password, done) => {
 app.post('/login', passport.authenticate('local', { session: false }),
   (req, res) => {
     res.send({
-      token: req.user,
+     token: req.user,
     });
   },
 );
@@ -34,7 +34,7 @@ passport.use(new BearerStrategy((token, done) => {
   try {
     const { username } = jwt.decode(token, SECRET);
     if (username === USER) {
-      done(null, username);
+      done(null, username, { scope: 'read' });
       return;
     }
     done(null, false);
@@ -42,26 +42,10 @@ passport.use(new BearerStrategy((token, done) => {
     done(null, false);
   }
 }));
-
-app.get('/todos', passport.authenticate('bearer', { session: false }), (req, res, next) => {
-    var user = req.user;
-    req.json(user);       
-  },
-);
-app.post(
-  '/login',
-  passport.authenticate('bearer', { session: false }),
+  
+app.post('/todos', passport.authenticate('bearer', { session: false }),
   (req, res) => {
-    res.send({
-      token: req.user,
-    });
-  },
-);
-app.delete(
-  '/todos/:id',
-  passport.authenticate('bearer', { session: false }),
-  (req, res) => {
-    
+    console.log("Acess authorized")
   },
 );
 
@@ -72,15 +56,6 @@ app.post("/sign-in", async (req, res) => {
     res.json(newTodo.rows[0]);
   } catch (err) {
     console.error(res.json(err.message));
-  }
-});
-
-app.get("/sign-in", async (req, res) => {
-  try {
-    const allTodo = await pool.query("SELECT * FROM todo");
-    res.json(allTodo.rows);
-  } catch (err) {
-    console.error(err.message);
   }
 });
 
