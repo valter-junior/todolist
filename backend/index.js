@@ -2,20 +2,26 @@ const express = require("express");
 const app = express();
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
-const BearerStrategy = require('passport-http-bearer').Strategy;
 const jwt = require("jwt-simple");
-const cors = require("cors");
+const Cors = require("cors");
 const pool = require("./db");
+const Notes = require("./Models");
+
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(Cors());
 app.use(express.json());
-const USER = "admin";
-const PASS = "12345";
+
+const user = "admin";
+const pass = "12345";
 const SECRET = "mysecret";
 
+
+
+
+
 passport.use(new LocalStrategy((username, password, done) => {
-    if (username === USER && password === PASS){
+    if (username === user && password === pass){
       done(null, jwt.encode({username}, SECRET));
       return;
     }
@@ -24,30 +30,22 @@ passport.use(new LocalStrategy((username, password, done) => {
 
 app.post('/login', passport.authenticate('local', { session: false }),
   (req, res) => {
-    res.send({
+    res.json({
      token: req.user,
     });
   },
 );
 
-passport.use(new BearerStrategy((token, done) => {
-  try {
-    const { username } = jwt.decode(token, SECRET);
-    if (username === USER) {
-      done(null, username, { scope: 'read' });
-      return;
-    }
-    done(null, false);
-  } catch (error) {
-    done(null, false);
-  }
-}));
-  
-app.post('/todos', passport.authenticate('bearer', { session: false }),
-  (req, res) => {
-    console.log("Acess authorized")
-  },
-);
+
+
+
+app.get('/notes', 
+  passport.authenticate('local', { session: false }),
+  function(req, res) {
+    res.json(Notes);
+  });
+
+
 
 app.post("/sign-in", async (req, res) => {
   try {
