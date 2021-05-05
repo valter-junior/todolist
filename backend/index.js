@@ -54,19 +54,17 @@ app.get('/notes',
   }
 });
 
-app.put("/sign-in/:id", async (req, res) => {
+app.put("/notes/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { firstName, lastName, password } = req.body;
-    const updateTodo = await pool.query
+    const { title, description } = req.body;
+    const updateTodo = await pool.query("UPDATE list SET title = $1, description = $2 WHERE id = $3", [title, description, id]);
     
+    res.json("List was Updated!");    
   } catch (error) {
-    
+    console.error(error.message);    
   }
-})
-
-
-
+});
 
 app.post("/sign-in", async (req, res) => {
   try {
