@@ -7,3 +7,9 @@ CREATE TABLE todo(
     login VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(50) UNIQUE NOT NULL
 );
+
+CREATE TABLE list(
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(50),
+    description VARCHAR(256)
+);
