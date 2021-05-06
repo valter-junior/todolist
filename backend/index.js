@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
-const jwt = require("jwt-simple");
+const jwt = require("jsonwebtoken");
 const Cors = require("cors");
 const pool = require("./db");
 const Notes = require("./Models");
@@ -18,7 +18,7 @@ const SECRET = "mysecret";
 
 passport.use(new LocalStrategy((username, password, done) => {
     if (username === user && password === pass){
-      done(null, jwt.encode({username}, SECRET));
+      done(null, jwt.sign({username}, SECRET));
       return;
     }
     done(null, false); 
@@ -69,8 +69,8 @@ app.put("/notes/:id", async (req, res) => {
 app.post("/sign-in", async (req, res) => {
   try {
     const { firstName, lastName, login, password } = req.body;
-    const newTodo = await pool.query("INSERT INTO todo (firstName, lastName, login, password) VALUES($1, $2, $3, $4) RETURNING *", [firstName, lastName, login, password]);
-    res.json(newTodo.rows[0]);
+    const newUser = await pool.query("INSERT INTO todo (firstName, lastName, login, password) VALUES($1, $2, $3, $4) RETURNING *", [firstName, lastName, login, password]);
+    res.json(newUser.rows[0]);
   } catch (err) {
     console.error(res.json(err.message));
   }
@@ -79,10 +79,21 @@ app.post("/sign-in", async (req, res) => {
 app.get("/sign-in/:id", async (req, res) => {
   try {
     const {id} = req.params;
-    const todo = await pool.query("SELECT * FROM todo WHERE todo_id = $1", [id]);
-    res.json(todo.rows[0]);
+    const user = await pool.query("SELECT * FROM todo WHERE todo_id = $1", [id]);
+    res.json(user.rows[0]);
   } catch (error) {
     console.error(err.message);
+  }
+});
+
+app.delete("/sign-in/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteUser = await pool.query("DELETE FROM todo WHERE todo_id = $1", [id]);
+
+    res.json("User was deleted!");    
+  } catch (error) {
+    console.error(error.message);    
   }
 });
 

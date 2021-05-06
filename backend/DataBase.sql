@@ -13,3 +13,4 @@ CREATE TABLE list(
     title VARCHAR(50),
     description VARCHAR(256)
 );
+
