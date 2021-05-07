@@ -5,32 +5,55 @@ const LocalStrategy = require('passport-local').Strategy;
 const jwt = require("jsonwebtoken");
 const Cors = require("cors");
 const pool = require("./db");
-const Notes = require("./Models");
+const bodyParser = require('body-parser');
+
 
 const PORT = process.env.PORT || 3001;
 
 app.use(Cors());
 app.use(express.json());
+app.use(bodyParser.json());
 
 const user = "admin";
 const pass = "12345";
 const SECRET = "mysecret";
 
-passport.use(new LocalStrategy((username, password, done) => {
-    if (username === user && password === pass){
-      done(null, jwt.sign({username}, SECRET));
-      return;
-    }
-    done(null, false); 
-  }));
+  const authenticateJWT = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    console.log(authHeader);
+    if(authHeader) {
+      const token = authHeader.split(' ')[1];
+      console.log(token)
 
-app.post('/login', passport.authenticate('local', { session: false }),
-  (req, res) => {
-    res.json({
-     token: req.user,
-    });
+      jwt.verify(JSON.parse(token), SECRET, (err, user) => {
+        console.log(err)
+        if(err) {
+          return res.sendStatus(403);
+        }
+
+        req.user = user;
+        next();
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  if(username === user && password === pass) {
+    const token = jwt.sign({ username: username }, SECRET);
+
+    res.json({ token });
+
+  } else {
+    res.json({"msg": "unauthorized"});
+
+  }
   },
 );
+
+app.use(authenticateJWT);
 
 app.post("/notes", async (req, res) => {
   try {
@@ -43,8 +66,7 @@ app.post("/notes", async (req, res) => {
   }
 });
 
-app.get('/notes', 
-  passport.authenticate('local', { session: false }), async (req, res) => {
+app.get('/notes', async (req, res) => {
     try {
       const allList = await pool.query("SELECT * FROM list");
       res.json(allList.rows);
