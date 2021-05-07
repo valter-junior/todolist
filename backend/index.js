@@ -1,7 +1,5 @@
 const express = require("express");
 const app = express();
-const passport = require("passport");
-const LocalStrategy = require('passport-local').Strategy;
 const jwt = require("jsonwebtoken");
 const Cors = require("cors");
 const pool = require("./db");
