@@ -2,8 +2,9 @@ const express = require("express");
 const app = express();
 const jwt = require("jsonwebtoken");
 const Cors = require("cors");
-const pool = require("./db");
 const bodyParser = require('body-parser');
+const login = require('./Controllers');
+const sequelize = require("./db");
 
 
 const PORT = process.env.PORT || 3001;
@@ -16,26 +17,27 @@ const user = "admin";
 const pass = "12345";
 const SECRET = "mysecret";
 
-  const authenticateJWT = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    console.log(authHeader);
-    if(authHeader) {
-      const token = authHeader.split(' ')[1];
-      console.log(token)
+const authenticateJWT = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  console.log(authHeader);
+  if(authHeader) {
+    const token = authHeader.split(' ')[1];
+    console.log(token)
 
-      jwt.verify(JSON.parse(token), SECRET, (err, user) => {
-        console.log(err)
-        if(err) {
-          return res.sendStatus(403);
-        }
+    // TODO: treat exception for missing token and malformed tokens
+    jwt.verify(JSON.parse(token), SECRET, (err, user) => {
+      console.log(err)
+      if(err) {
+        return res.sendStatus(403);
+      }
 
-        req.user = user;
-        next();
-      });
-    } else {
-      res.sendStatus(401);
-    }
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401); 
   }
+}
 
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
@@ -56,17 +58,18 @@ app.use(authenticateJWT);
 app.post("/notes", async (req, res) => {
   try {
     const { title, description } = req.body;
-    const newNotes = await pool.query("INSERT INTO list (title, description) VALUES($1, $2) RETURNING * ", [title, description]);
+    const newNotes = await sequelize.query("INSERT INTO list (title, description) VALUES($1, $2) RETURNING * ", [title, description]);
     res.json(newNotes.rows[0]);
     
   } catch (error) {
+    // TODO: internal error messages should not be sent back to user.
     console.log(res.json(error.message));    
   }
 });
 
 app.get('/notes', async (req, res) => {
     try {
-      const allList = await pool.query("SELECT * FROM list");
+      const allList = await sequelize.query("SELECT * FROM list");
       res.json(allList.rows);
       
     } catch (error) {
@@ -78,7 +81,7 @@ app.put("/notes/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description } = req.body;
-    const updateTodo = await pool.query("UPDATE list SET title = $1, description = $2 WHERE id = $3", [title, description, id]);
+    const updateTodo = await sequelize.query("UPDATE list SET title = $1, description = $2 WHERE id = $3", [title, description, id]);
     
     res.json("List was Updated!");    
   } catch (error) {
@@ -89,7 +92,7 @@ app.put("/notes/:id", async (req, res) => {
 app.post("/sign-in", async (req, res) => {
   try {
     const { firstName, lastName, login, password } = req.body;
-    const newUser = await pool.query("INSERT INTO todo (firstName, lastName, login, password) VALUES($1, $2, $3, $4) RETURNING *", [firstName, lastName, login, password]);
+    const newUser = await sequelize.query("INSERT INTO todo (firstName, lastName, login, password) VALUES($1, $2, $3, $4) RETURNING *", [firstName, lastName, login, password]);
     res.json(newUser.rows[0]);
   } catch (err) {
     console.error(res.json(err.message));
@@ -99,7 +102,7 @@ app.post("/sign-in", async (req, res) => {
 app.get("/sign-in/:id", async (req, res) => {
   try {
     const {id} = req.params;
-    const user = await pool.query("SELECT * FROM todo WHERE todo_id = $1", [id]);
+    const user = await sequelize.query("SELECT * FROM todo WHERE todo_id = $1", [id]);
     res.json(user.rows[0]);
   } catch (error) {
     console.error(err.message);
@@ -109,7 +112,7 @@ app.get("/sign-in/:id", async (req, res) => {
 app.delete("/sign-in/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const deleteUser = await pool.query("DELETE FROM todo WHERE todo_id = $1", [id]);
+    const deleteUser = await sequelize.query("DELETE FROM todo WHERE todo_id = $1", [id]);
 
     res.json("User was deleted!");    
   } catch (error) {
