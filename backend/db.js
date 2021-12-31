@@ -1,7 +1,10 @@
-const { Sequelize } = require('sequelize');
+const sequelize = require('sequelize');
+const  Sequelize  = require('sequelize');
 
 async function connectiondb(){
-    const sequelize = new Sequelize('postgres://postgres:postgres:5432/todolist')
+    const sequelize = new Sequelize('todolist', 'postgres', 'postgres', {
+        dialect: 'postgres'
+    })
     try {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
@@ -11,7 +14,5 @@ async function connectiondb(){
 }
 
 
-
-
-module.exports = connectiondb.sequelize
+connectiondb()
 

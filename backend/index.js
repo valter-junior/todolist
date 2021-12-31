@@ -3,9 +3,12 @@ const app = express();
 const jwt = require("jsonwebtoken");
 const Cors = require("cors");
 const bodyParser = require('body-parser');
-const login = require('./Controllers');
+
 const sequelize = require("./db");
 
+const Notes = require("./models/list");
+const db = require('./models/init-models');
+const controllers = require('./controllers')
 
 const PORT = process.env.PORT || 3001;
 
@@ -25,7 +28,7 @@ const authenticateJWT = (req, res, next) => {
     console.log(token)
 
     // TODO: treat exception for missing token and malformed tokens
-    jwt.verify(JSON.parse(token), SECRET, (err, user) => {
+    jwt.verify(token, SECRET, (err, user) => {
       console.log(err)
       if(err) {
         return res.sendStatus(403);
@@ -55,39 +58,13 @@ app.post('/login', (req, res) => {
 
 app.use(authenticateJWT);
 
-app.post("/notes", async (req, res) => {
-  try {
-    const { title, description } = req.body;
-    const newNotes = await sequelize.query("INSERT INTO list (title, description) VALUES($1, $2) RETURNING * ", [title, description]);
-    res.json(newNotes.rows[0]);
-    
-  } catch (error) {
-    // TODO: internal error messages should not be sent back to user.
-    console.log(res.json(error.message));    
-  }
-});
+app.post("/notes", controllers.createPost);
+ 
+app.get("/notes", controllers.getAllNotes);
 
-app.get('/notes', async (req, res) => {
-    try {
-      const allList = await sequelize.query("SELECT * FROM list");
-      res.json(allList.rows);
-      
-    } catch (error) {
-      console.error(error.message);
-  }
-});
+app.put("/notes/:id", controllers.updateNotes);
 
-app.put("/notes/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { title, description } = req.body;
-    const updateTodo = await sequelize.query("UPDATE list SET title = $1, description = $2 WHERE id = $3", [title, description, id]);
-    
-    res.json("List was Updated!");    
-  } catch (error) {
-    console.error(error.message);    
-  }
-});
+app.delete("/notes/:id", controllers.deleteNotes)
 
 app.post("/sign-in", async (req, res) => {
   try {
@@ -120,6 +97,9 @@ app.delete("/sign-in/:id", async (req, res) => {
   }
 });
 
+
+
+ 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
