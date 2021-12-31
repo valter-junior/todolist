@@ -1,4 +1,4 @@
 /node_modules
-/home/valter/Projects/todolist/backend/models/list.js
-/home/valter/Projects/todolist/backend/config
-/home/valter/Projects/todolist/backend/db.js
+/models
+/config
+/db.js
