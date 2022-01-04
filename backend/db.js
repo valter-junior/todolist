@@ -16,3 +16,4 @@ async function connectiondb(){
 
 connectiondb()
 
+module.exports = connectiondb()

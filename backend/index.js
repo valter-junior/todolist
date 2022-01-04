@@ -6,7 +6,8 @@ const bodyParser = require('body-parser');
 
 const sequelize = require("./db");
 
-const controllers = require('./controllers')
+const controllersNote = require('./controllers/controllerNote');
+const controllersUser = require('./controllers/controllerUser')
 
 const PORT = process.env.PORT || 3001;
 
@@ -56,44 +57,19 @@ app.post('/login', (req, res) => {
 
 app.use(authenticateJWT);
 
-app.post("/notes", controllers.createPost);
+app.post("/notes", controllersNote.createPost);
  
-app.get("/notes", controllers.getAllNotes);
+app.get("/notes", controllersNote.getAllNotes);
 
-app.put("/notes/:id", controllers.updateNotes);
+app.put("/notes/:id", controllersNote.updateNotes);
 
-app.delete("/notes/:id", controllers.deleteNotes)
+app.delete("/notes/:id", controllersNote.deleteNotes);
 
-app.post("/sign-in", async (req, res) => {
-  try {
-    const { firstName, lastName, login, password } = req.body;
-    const newUser = await sequelize.query("INSERT INTO todo (firstName, lastName, login, password) VALUES($1, $2, $3, $4) RETURNING *", [firstName, lastName, login, password]);
-    res.json(newUser.rows[0]);
-  } catch (err) {
-    console.error(res.json(err.message));
-  }
-});
+app.post("/sign-in", controllersUser.createUser);
 
-app.get("/sign-in/:id", async (req, res) => {
-  try {
-    const {id} = req.params;
-    const user = await sequelize.query("SELECT * FROM todo WHERE todo_id = $1", [id]);
-    res.json(user.rows[0]);
-  } catch (error) {
-    console.error(err.message);
-  }
-});
+app.get("/sign-in", controllersUser.getAllUsers);
 
-app.delete("/sign-in/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteUser = await sequelize.query("DELETE FROM todo WHERE todo_id = $1", [id]);
-
-    res.json("User was deleted!");    
-  } catch (error) {
-    console.error(error.message);    
-  }
-});
+app.delete("/sign-in/:id", controllersUser.deleteUser);
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
