@@ -1,4 +1,4 @@
-/node_modules
-/models
-/config
-/db.js
+node_modules/
+models/
+config/
+db.js/

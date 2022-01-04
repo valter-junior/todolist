@@ -6,8 +6,6 @@ const bodyParser = require('body-parser');
 
 const sequelize = require("./db");
 
-const Notes = require("./models/list");
-const db = require('./models/init-models');
 const controllers = require('./controllers')
 
 const PORT = process.env.PORT || 3001;
@@ -97,10 +95,6 @@ app.delete("/sign-in/:id", async (req, res) => {
   }
 });
 
-
-
- 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
-

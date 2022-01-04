@@ -5,7 +5,8 @@ const createPost = async (req, res) => {
   try {
     const note = await Notes.create({
       title: req.body.title,
-      description: req.body.description});
+      description: req.body.description
+    });
     return res.status(201).json({
       note,
     });
@@ -17,8 +18,7 @@ const createPost = async (req, res) => {
 const getAllNotes = async (req, res) => {
   try {
     const notes = await Notes.findAll({
-      attributes: ['id', 'title', 'description'],
-      
+      attributes: ['id', 'title', 'description']
     });
     return res.status(200).json({ notes });
   } catch (error) {
@@ -62,5 +62,4 @@ module.exports = {
   getAllNotes,
   updateNotes,
   deleteNotes
-
 }
