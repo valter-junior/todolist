@@ -1,10 +1,11 @@
-const Users = require('../models/todo');
+const User = require('../models/user');
+
 
 const createUser = async (req, res) => {
     try {
-      const user = await Users.create({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
+      const user = await User.create({
+        firstName: req.body.firstname,
+        lastName: req.body.lastname,
         login: req.body.login,
         password: req.body.password
 
@@ -19,8 +20,8 @@ const createUser = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
-      const users = await Users.findAll({
-        attributes: ['todo_id', 'firstname', 'lastname', 'login', 'password']
+      const users = await User.findAll({
+        attributes: ['id', 'firstName', 'lastName', 'login', 'password']
       });
       return res.status(200).json({ users });
     } catch (error) {
@@ -31,7 +32,7 @@ const getAllUsers = async (req, res) => {
   const deleteUser = async (req, res) => {
     try {
       const { id } = req.params;
-      const deleted = await Users.destroy({
+      const deleted = await User.destroy({
         where: { todo_id: id }
       });
       if (deleted) {
@@ -42,6 +43,8 @@ const getAllUsers = async (req, res) => {
       return res.status(500).send(error.message);
     }
   };
+
+
 
   module.exports = {
       getAllUsers,

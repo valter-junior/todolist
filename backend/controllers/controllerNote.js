@@ -1,15 +1,15 @@
-const Notes = require('../models/list');
+const Notes = require('../models/notes');
+const User = require('../models/user');
 
 
 const createPost = async (req, res) => {
   try {
     const note = await Notes.create({
       title: req.body.title,
-      description: req.body.description
+      description: req.body.description,
+      userId: req.body.userId
     });
-    return res.status(201).json({
-      note,
-    });
+    return res.status(200).json({ note, });
   } catch (error) {
     return res.status(500).json({error: error.message})
   }

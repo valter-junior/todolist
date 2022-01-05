@@ -41,6 +41,8 @@ const authenticateJWT = (req, res, next) => {
   }
 }
 
+
+
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   if(username === user && password === pass) {
@@ -55,6 +57,10 @@ app.post('/login', (req, res) => {
   },
 );
 
+app.post("/sign-in", controllersUser.createUser);
+
+app.get("/sign-in", controllersUser.getAllUsers);
+
 app.use(authenticateJWT);
 
 app.post("/notes", controllersNote.createPost);
@@ -64,10 +70,6 @@ app.get("/notes", controllersNote.getAllNotes);
 app.put("/notes/:id", controllersNote.updateNotes);
 
 app.delete("/notes/:id", controllersNote.deleteNotes);
-
-app.post("/sign-in", controllersUser.createUser);
-
-app.get("/sign-in", controllersUser.getAllUsers);
 
 app.delete("/sign-in/:id", controllersUser.deleteUser);
 

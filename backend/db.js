@@ -2,7 +2,7 @@ const sequelize = require('sequelize');
 const  Sequelize  = require('sequelize');
 
 async function connectiondb(){
-    const sequelize = new Sequelize('todolist', 'postgres', 'postgres', {
+    const sequelize = new Sequelize('todolist', 'root', 'root', {
         dialect: 'postgres'
     })
     try {
