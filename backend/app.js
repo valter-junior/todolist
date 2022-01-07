@@ -17,9 +17,11 @@ app.use(Cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-const user = "admin";
-const pass = "12345";
-const SECRET = "mysecret";
+const user = require('./authentication').user;
+const pass = require('./authentication').pass;
+const SECRET = require('./authentication').SECRET; 
+
+
 
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
