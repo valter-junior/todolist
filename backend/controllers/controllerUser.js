@@ -1,14 +1,25 @@
-const User = require('../models/user');
+const { PrismaClient } = require('@prisma/client') 
+
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+})
+
 
 
 const createUser = async (req, res) => {
     try {
-      const user = await User.create({
-        firstName: req.body.firstname,
-        lastName: req.body.lastname,
-        login: req.body.login,
-        password: req.body.password
-
+      const { firstname, lastname, email, password} = req.body
+      const user = await prisma.users.create({
+        data: {
+          firstname,
+          lastname,
+          email,
+          password
+        },      
       });
       return res.status(201).json({
         user,

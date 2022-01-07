@@ -4,10 +4,13 @@ const User = require('../models/user');
 
 const createPost = async (req, res) => {
   try {
+    
     const note = await Notes.create({
+      userId: req.body.userId,
       title: req.body.title,
       description: req.body.description,
-      userId: req.body.userId
+    
+      
     });
     return res.status(200).json({ note, });
   } catch (error) {
@@ -17,10 +20,13 @@ const createPost = async (req, res) => {
 
 const getAllNotes = async (req, res) => {
   try {
+    
     const notes = await Notes.findAll({
-      attributes: ['id', 'title', 'description']
+      attributes: ['userId', 'title', 'description']
     });
+    
     return res.status(200).json({ notes });
+        
   } catch (error) {
     return res.status(500).send(error.message);
   }

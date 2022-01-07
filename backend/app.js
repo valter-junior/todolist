@@ -4,9 +4,9 @@ const jwt = require("jsonwebtoken");
 const Cors = require("cors");
 const bodyParser = require('body-parser');
 
-const sequelize = require("./db");
 
-const controllersNote = require('./controllers/controllerNote');
+
+/**const controllersNote = require('./controllers/controllerNote'); */
 const controllersUser = require('./controllers/controllerUser')
 
 const PORT = process.env.PORT || 3001;
@@ -62,7 +62,7 @@ app.post("/sign-in", controllersUser.createUser);
 app.get("/sign-in", controllersUser.getAllUsers);
 
 app.use(authenticateJWT);
-
+/** 
 app.post("/notes", controllersNote.createPost);
  
 app.get("/notes", controllersNote.getAllNotes);
@@ -72,7 +72,7 @@ app.put("/notes/:id", controllersNote.updateNotes);
 app.delete("/notes/:id", controllersNote.deleteNotes);
 
 app.delete("/sign-in/:id", controllersUser.deleteUser);
-
+*/
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
