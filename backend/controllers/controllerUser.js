@@ -31,9 +31,7 @@ const createUser = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
-      const users = await User.findAll({
-        attributes: ['id', 'firstName', 'lastName', 'login', 'password']
-      });
+      const users = await prisma.users.findMany();
       return res.status(200).json({ users });
     } catch (error) {
       return res.status(500).send(error.message);
@@ -42,10 +40,12 @@ const getAllUsers = async (req, res) => {
 
   const deleteUser = async (req, res) => {
     try {
-      const { id } = req.params;
-      const deleted = await User.destroy({
-        where: { todo_id: id }
-      });
+      const  id  = +req.params.id
+      const deleted = await prisma.users.delete({
+        where: {
+          id
+        },
+      })
       if (deleted) {
         return res.status(200).json({"msg": "User deleted"});
       }

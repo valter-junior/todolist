@@ -7,7 +7,9 @@ const bodyParser = require('body-parser');
 
 
 /**const controllersNote = require('./controllers/controllerNote'); */
-const controllersUser = require('./controllers/controllerUser')
+const controllersUser = require('./controllers/controllerUser');
+const controllerList = require('./controllers/controllerList');
+const controllerTask = require('./controllers/controllerTask')
 
 const PORT = process.env.PORT || 3001;
 
@@ -59,20 +61,26 @@ app.post('/login', (req, res) => {
 
 app.post("/sign-in", controllersUser.createUser);
 
-app.get("/sign-in", controllersUser.getAllUsers);
+
 
 app.use(authenticateJWT);
-/** 
-app.post("/notes", controllersNote.createPost);
- 
-app.get("/notes", controllersNote.getAllNotes);
 
-app.put("/notes/:id", controllersNote.updateNotes);
-
-app.delete("/notes/:id", controllersNote.deleteNotes);
+app.get("/sign-in", controllersUser.getAllUsers);
 
 app.delete("/sign-in/:id", controllersUser.deleteUser);
-*/
+
+app.post("/list", controllerList.createList);
+  
+app.get("/list", controllerList.getAllLists);
+
+app.put("/list/:id", controllerList.updateLists);
+
+app.delete("/list/:id", controllerList.deleteLists); 
+
+app.post("/task", controllerTask.createTask);
+  
+app.get("/task", controllerList.getAllLists);
+
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
