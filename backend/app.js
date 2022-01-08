@@ -3,13 +3,10 @@ const app = express();
 const jwt = require("jsonwebtoken");
 const Cors = require("cors");
 const bodyParser = require('body-parser');
-
-
-
-/**const controllersNote = require('./controllers/controllerNote'); */
 const controllersUser = require('./controllers/controllerUser');
-const controllerList = require('./controllers/controllerList');
-const controllerTask = require('./controllers/controllerTask')
+const controllerTask = require('./controllers/controllerTask');
+const listRouter = require('./routes/lists');
+
 
 const PORT = process.env.PORT || 3001;
 
@@ -20,8 +17,6 @@ app.use(bodyParser.json());
 const user = require('./authentication').user;
 const pass = require('./authentication').pass;
 const SECRET = require('./authentication').SECRET; 
-
-
 
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -71,13 +66,7 @@ app.get("/sign-in", controllersUser.getAllUsers);
 
 app.delete("/sign-in/:id", controllersUser.deleteUser);
 
-app.post("/list", controllerList.createList);
-  
-app.get("/list", controllerList.getAllLists);
-
-app.put("/list/:id", controllerList.updateLists);
-
-app.delete("/list/:id", controllerList.deleteLists); 
+app.use('/lists', listRouter);
 
 app.post("/task", controllerTask.createTask);
   

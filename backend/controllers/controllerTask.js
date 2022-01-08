@@ -1,12 +1,4 @@
-const { PrismaClient } = require('@prisma/client') 
-
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL,
-    },
-  },
-})
+const prisma = require('../db').prisma;
 
 const createTask = async (req, res) => {
   try {
@@ -18,9 +10,6 @@ const createTask = async (req, res) => {
       }
     });
     return res.status(200).json({ list });
-  
-    
-    
   } catch (error) {
     return res.status(500).json({error: error.message})
   }

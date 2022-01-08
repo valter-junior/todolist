@@ -1,14 +1,4 @@
-const { PrismaClient } = require('@prisma/client') 
-
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL,
-    },
-  },
-})
-
-
+const prisma = require('../db').prisma;
 
 const createUser = async (req, res) => {
     try {
@@ -38,27 +28,25 @@ const getAllUsers = async (req, res) => {
     }
   }
 
-  const deleteUser = async (req, res) => {
-    try {
-      const  id  = +req.params.id
-      const deleted = await prisma.users.delete({
-        where: {
-          id
-        },
-      })
-      if (deleted) {
-        return res.status(200).json({"msg": "User deleted"});
-      }
-      throw new Error("Note not found");
-    } catch (error) {
-      return res.status(500).send(error.message);
+const deleteUser = async (req, res) => {
+  try {
+    const  id  = +req.params.id
+    const deleted = await prisma.users.delete({
+      where: {
+        id
+      },
+    })
+    if (deleted) {
+      return res.status(200).json({"msg": "User deleted"});
     }
-  };
-
-
-
-  module.exports = {
-      getAllUsers,
-      createUser,
-      deleteUser
+    throw new Error("Note not found");
+  } catch (error) {
+    return res.status(500).send(error.message);
   }
+};
+
+module.exports = {
+  getAllUsers,
+  createUser,
+  deleteUser
+}
