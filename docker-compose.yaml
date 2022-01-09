@@ -8,11 +8,12 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       PGDATA: /data/postgres
+      POSTGRES_DB: todolist
     volumes:
       - postgres:/data/postgres
     ports:
       - "5432:5432"
-  
+
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -24,7 +25,19 @@ services:
         - pgadmin:/root/.pgadmin
     ports:
       - "8080:80"
-    
+
+  todolist:
+    container_name: todolist
+    build: ./backend
+    environment:
+      DATABASE_URL: postgres://root:root@db:5432/todolist
+      PORT: 3000
+      USER: admin
+      PASSWORD: "12345"
+      SECRET: mysecret
+    ports:
+      - "3000:3000"
+
 volumes:
   postgres:
   pgadmin:
