@@ -4,9 +4,10 @@ const jwt = require("jsonwebtoken");
 const Cors = require("cors");
 const bodyParser = require('body-parser');
 const controllersUser = require('./controllers/controllerUser');
-const controllerTask = require('./controllers/controllerTask');
 const listRouter = require('./routes/lists');
-
+const taskRouter = require('./routes/tasks')
+const userRouter = require('./routes/users')
+const loginRouter = require('./routes/login')
 
 const PORT = process.env.PORT || 3001;
 
@@ -17,6 +18,10 @@ app.use(bodyParser.json());
 const user = require('./authentication').user;
 const pass = require('./authentication').pass;
 const SECRET = require('./authentication').SECRET; 
+const bcrypt = require('bcryptjs');
+const accessTokenSecret = process.env.TOKEN_SECRET
+
+const connect = require('./auth');
 
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -26,7 +31,7 @@ const authenticateJWT = (req, res, next) => {
     console.log(token)
 
     // TODO: treat exception for missing token and malformed tokens
-    jwt.verify(token, SECRET, (err, user) => {
+    jwt.verify(token, accessTokenSecret, (err, user) => {
       console.log(err)
       if(err) {
         return res.sendStatus(403);
@@ -40,9 +45,7 @@ const authenticateJWT = (req, res, next) => {
   }
 }
 
-
-
-app.post('/login', (req, res) => {
+app.post('/', (req, res) => {
   const { username, password } = req.body;
   if(username === user && password === pass) {
     const token = jwt.sign({ username: username }, SECRET);
@@ -58,19 +61,15 @@ app.post('/login', (req, res) => {
 
 app.post("/sign-in", controllersUser.createUser);
 
+app.post('/login', connect.Login)
 
+app.use('/sign-in', userRouter);
 
 app.use(authenticateJWT);
 
-app.get("/sign-in", controllersUser.getAllUsers);
-
-app.delete("/sign-in/:id", controllersUser.deleteUser);
 
 app.use('/lists', listRouter);
-
-app.post("/task", controllerTask.createTask);
-  
-app.get("/task", controllerList.getAllLists);
+app.use('/tasks', taskRouter)
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

@@ -9,7 +9,7 @@ const createTask = async (req, res) => {
         description,
       }
     });
-    return res.status(200).json({ list });
+    return res.status(200).json(list);
   } catch (error) {
     return res.status(500).json({error: error.message})
   }
@@ -20,7 +20,7 @@ const getAllTasks = async (req, res) => {
     
     const lists = await prisma.tasks.findMany()
     
-    return res.status(200).json({ lists });
+    return res.status(200).json(lists);
         
   } catch (error) {
     return res.status(500).send(error.message);
