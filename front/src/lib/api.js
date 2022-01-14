@@ -11,3 +11,16 @@ export const signIn = async (body) => {
     });
     return res.json();
 }
+
+export const Login = async (body) => {
+    const res = await fetch(`${baseUrl}/sign-in/:email/:password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+
+        body: JSON.stringify(body)
+    });
+    if (res) {
+        return res.json();
+    }
+    return res.json("Email or password invalid")
+}

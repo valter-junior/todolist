@@ -18,6 +18,7 @@ import SignIn from './login/sign.in';
 import {ProtectedRoute} from './protected.route'
 import request from '../node_modules/superagent/dist/superagent'
 import CreateUser from './login/sign.in';
+import LoginUser from './login/login';
 
 
 function App() {
@@ -67,7 +68,7 @@ console.log(res.text);
         <Container>
           <BrowserRouter>
             <Switch>
-              <ProtectedRoute exact path="/login" component={Home}>
+              <ProtectedRoute exact path="/login" component={LoginUser}>
                 <Login />
               </ProtectedRoute>
               <Route path="/sign-in" component={CreateUser}>
