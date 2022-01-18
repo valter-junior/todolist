@@ -9,7 +9,7 @@ import {ProtectedRoute} from './protected.route'
 import api from './services/api';
 import CreateUser from './login/sign.in'; */
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Route, Switch} from 'react-router-dom';
+import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
 import {Home} from './home';
@@ -19,6 +19,7 @@ import {ProtectedRoute} from './protected.route'
 import request from '../node_modules/superagent/dist/superagent'
 import CreateUser from './login/sign.in';
 import LoginUser from './login/login';
+import { signIn } from './lib/api';
 
 
 function App() {
@@ -67,17 +68,11 @@ console.log(res.text);
       <div>
         <Container>
           <BrowserRouter>
-            <Switch>
-              <ProtectedRoute exact path="/login" component={LoginUser}>
-                <Login />
-              </ProtectedRoute>
-              <Route path="/sign-in" component={CreateUser}>
-                <SignIn />
-              </Route>
-              <Route path="/">
-                <Home />
-              </Route>
-            </Switch>
+            <Routes>
+              <Route exact path="/" element={<Home/>}/>
+              <Route exact path="/login" element={<Login/>}/>              
+              <Route path="/sign-in" element={<SignIn/>} />
+            </Routes>
           </BrowserRouter>
         </Container>  
       </div>

@@ -1,8 +1,11 @@
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 const baseUrl = "http://localhost:3001";
 
 
 export const signIn = async (body) => {
-    const res = await fetch(`${baseUrl}/sign-in`, {
+    const res = await fetch(`${baseUrl}/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         // We convert the React state to JSON and send it as the POST body
@@ -13,14 +16,12 @@ export const signIn = async (body) => {
 }
 
 export const Login = async (body) => {
-    const res = await fetch(`${baseUrl}/sign-in/:email/:password`, {
+    const res = await fetch(`${baseUrl}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
 
         body: JSON.stringify(body)
-    });
-    if (res) {
-        return res.json();
-    }
-    return res.json("Email or password invalid")
+    })
+    return res.json()
+
 }

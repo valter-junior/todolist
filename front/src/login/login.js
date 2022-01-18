@@ -1,27 +1,41 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
+
 import {useForm} from 'react-hook-form';
 import { Login } from '../lib/api';
+import swal from 'sweetalert';
 
 const LoginUser = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPass] = useState("");
     
-    const handleLogin = () =>{
-        props.history.push('/')
-    }
+    const history = useNavigate();
+    
+    
+   
+    
     const onSubmitForm = async (event) => {
         event.preventDefault();
+
+        const body = {email, password}
+        const response = await Login(body)
     
-        try {
-            const body = {email, password};
-            console.log(body)
-            const response = await Login(body);
-            console.log(response);
-        } catch (err) {
-            console.log(err.message);
+        if (response === "Email or password invalid") {
+            swal("Email or password invalid!")
+        } else
+        if ('token'in response) {
+            swal("success", {
+              buttons: false,
+              timer: 2000,
+            })
+            .then((value) => {
+              localStorage.setItem('token', response['token']);
+              localStorage.setItem('user', JSON.stringify(response['user']));
+              history("/")
+            })
         }
-    } 
+    }
     
     return (
         <div>
@@ -35,7 +49,7 @@ const LoginUser = (props) => {
                     Password:
                     <input type="password" className="form-control" value={password} onChange={e=> setPass(e.target.value)}/>
                 </label>
-                <input type="button" value="submit" onClick={handleLogin} />
+                <input type="button" value="submit" onClick={onSubmitForm}/>
             </form>
         </div>
     );
