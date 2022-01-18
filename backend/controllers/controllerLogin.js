@@ -16,7 +16,7 @@ const loginUser = async(req, res) => {
       if(email === usermail.email) {
         if (password === usermail.password) {
           const token = jwt.sign({ email: email, password: password }, accessTokenUsers);
-          res.json({usermail, token});
+          res.json({token});
         } else {
           res.json("Email or password invalid")
         }
